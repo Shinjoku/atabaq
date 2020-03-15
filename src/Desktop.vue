@@ -4,13 +4,13 @@
     <window width="500px" height="250px">
       what're ya talking about
     </window>
-    <!-- <icon-grid />
-    <taskbar /> -->
+    <!-- <icon-grid /> -->
+    <taskbar />
   </div>
 </template>
 
 <script>
-import Window from './components/core/window';
+import Window from './core/window';
 
 export default {
   components: { Window }
