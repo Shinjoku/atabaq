@@ -8,7 +8,7 @@
       <button type="button" @click.stop="open=false; $emit('minimize')">
         <i class="fas fa-minus"></i>
       </button>
-      <button type="button" @click.stop="isMaximized = !isMaximized; $emit('maximize')">
+      <button type="button" @click.stop="toggleMaximize()">
         <i class="far fa-square"></i>
       </button>
       <button type="button" @click.stop="$emit('close')">
