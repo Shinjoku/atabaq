@@ -1,10 +1,11 @@
 <template>
   <div id="desktop" @contextmenu.prevent="openMenu">
-    <right-click-menu
+    <context-menu
       ref="context-menu"
       :open="contextMenu.isOpen"
       :top="contextMenu.top + 'px'"
       :left="contextMenu.left + 'px'"
+      :options="contextMenu.options"
       @close="closeMenu"
     />
     <h1>Here's a window o/</h1>
@@ -16,15 +17,29 @@
 
 <script>
 import Window from "./core/window";
-import RightClickMenu from "./core/RightClickMenu";
+import ContextMenu from "./core/ContextMenu";
 
 export default {
-  components: { Window, RightClickMenu },
+  components: { Window, ContextMenu },
   data: () => ({
     contextMenu: {
       isOpen: false,
       top: 0,
-      left: 0
+      left: 0,
+      options: [
+        {
+          description: "Show Icon Grid",
+          callback: () => {
+            console.log("Opens the craziest icon grid ever!");
+          }
+        },
+        {
+          description: "Change Wallpaper...",
+          callback: () => {
+            console.log("Opens the laziest wallpaper window!");
+          }
+        }
+      ]
     }
   }),
   methods: {
@@ -44,7 +59,9 @@ export default {
     },
 
     closeMenu() {
-      this.contextMenu.isOpen = false;
+      setTimeout(() => {
+        this.contextMenu.isOpen = false;
+      }, 200);
     },
 
     openMenu(e) {
