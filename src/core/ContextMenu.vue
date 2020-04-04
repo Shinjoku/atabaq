@@ -5,6 +5,7 @@
     id="context-menu"
     v-show="open"
     @blur="closeMenu"
+    @click="forceFocusLoss"
     :style="`top: ${top + 'px'}; left: ${left + 'px'};`"
   >
     <li
@@ -17,13 +18,12 @@
 
 <script>
 export default {
-  props: {
-    options: Array
-  },
+  props: { options: Array },
   data: () => ({
     open: false,
     top: 0,
-    left: 0
+    left: 0,
+    _exitTimeout: null
   }),
   mounted() {
     this.$emit("ready", this.openMenu);
@@ -44,20 +44,27 @@ export default {
     },
 
     closeMenu() {
-      let x = setTimeout(function() {
-        this.open = false;
-        clearTimeout(x);
-      }, 200);
+      this._exitTimeout = setTimeout(() => this.open = false, 200);
+    },
+
+    forceFocusLoss(){
+      this.$refs.menu.blur();
     },
 
     openMenu(e) {
-      const menu = this.$refs.menu;
+
+      if (this._exitTimeout){
+        clearTimeout(this._exitTimeout);
+        this._exitTimeout = null;
+      }
+
       this.open = true;
 
       this.$nextTick(() => {
         this.setMenu(e.y, e.x);
-        menu.focus();
+        this.$refs.menu.focus();
       });
+
     }
   }
 };

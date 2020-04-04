@@ -2,7 +2,7 @@
   <div id="desktop" @contextmenu.prevent="openContextMenu">
     <context-menu
       ref="context-menu"
-      :options="contextMenu.options"
+      :options="contextMenuOptions"
       @ready="setToggleMenuFn"
     />
     <h1>Here's a window o/</h1>
@@ -19,26 +19,21 @@ import ContextMenu from "./core/ContextMenu";
 export default {
   components: { Window, ContextMenu },
   data: () => ({
-    contextMenu: {
-      isOpen: false,
-      top: 0,
-      left: 0,
-      options: [
-        {
-          description: "Show Icon Grid",
-          callback: () => {
-            console.log("Opens the craziest icon grid ever!");
-          }
-        },
-        {
-          description: "Change Wallpaper...",
-          callback: () => {
-            console.log("Opens the laziest wallpaper window!");
-          }
+    contextMenuOptions: [
+      {
+        description: "Show Icon Grid",
+        callback: () => {
+          console.log("Opens the craziest icon grid ever!");
         }
-      ],
-      openContextMenu: null
-    }
+      },
+      {
+        description: "Change Wallpaper...",
+        callback: () => {
+          console.log("Opens the laziest wallpaper window!");
+        }
+      }
+    ],
+    openContextMenu: null 
   }),
   methods: {
     setToggleMenuFn(fn) {
