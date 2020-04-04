@@ -1,42 +1,75 @@
 <template>
   <ul
-    id="context-menu"
+    ref="menu"
     tabindex="-1"
+    id="context-menu"
     v-show="open"
-    @blur="$emit('close')"
-    :style="`top: ${top}; left: ${left};`"
+    @blur="closeMenu"
+    :style="`top: ${top + 'px'}; left: ${left + 'px'};`"
   >
-    <li 
+    <li
       v-for="(option, index) in options"
       :key="'context-menu-opt' + index"
       @click="option.callback"
-    >
-      {{option.description}}
-    </li>
+    >{{ option.description }}</li>
   </ul>
 </template>
 
 <script>
 export default {
   props: {
-    open: Boolean,
-    top: String,
-    left: String,
     options: Array
+  },
+  data: () => ({
+    open: false,
+    top: 0,
+    left: 0
+  }),
+  mounted() {
+    this.$emit("ready", this.openMenu);
+  },
+  methods: {
+    setMenu(top, left) {
+      const menu = this.$refs.menu;
+
+      let largestHeight = window.innerHeight - menu.offsetHeight - 15;
+      let largestWidth = window.innerWidth - menu.offsetWidth - 15;
+
+      if (top > largestHeight) top = largestHeight;
+
+      if (left > largestWidth) left = largestWidth;
+
+      this.top = top;
+      this.left = left;
+    },
+
+    closeMenu() {
+      let x = setTimeout(function() {
+        this.open = false;
+        clearTimeout(x);
+      }, 200);
+    },
+
+    openMenu(e) {
+      const menu = this.$refs.menu;
+      this.open = true;
+
+      this.$nextTick(() => {
+        this.setMenu(e.y, e.x);
+        menu.focus();
+      });
+    }
   }
 };
 </script>
 
 <style scoped>
-
 #context-menu {
   background: #4b4b4bb3;
-  backdrop-filter: blur(.8);
+  backdrop-filter: blur(0.8);
   border: 1px solid #bdbdbd;
-  box-shadow: 
-    0 2px 2px 0     rgba(0, 0, 0, 0.14),
-    0 3px 1px -2px  rgba(0, 0, 0, 0.2),
-    0 1px 5px 0     rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12);
   display: block;
   list-style: none;
   margin: 0;
@@ -46,7 +79,7 @@ export default {
   transform: translateY(8px);
   opacity: 0;
   z-index: 2;
-  transition: transform 0.2s, opacity .2s;
+  transition: transform 0.2s, opacity 0.2s;
 }
 
 #context-menu:focus {
