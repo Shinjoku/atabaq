@@ -70,44 +70,35 @@ export default {
 };
 </script>
 
-<style scoped>
-#context-menu {
-  background: #4b4b4bb3;
-  backdrop-filter: blur(0.8);
-  border: 1px solid #bdbdbd;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2),
-    0 1px 5px 0 rgba(0, 0, 0, 0.12);
-  display: block;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  position: absolute;
-  /* width: 250px; */
-  transform: translateY(8px);
-  opacity: 0;
-  z-index: 2;
-  transition: transform 0.2s, opacity 0.2s;
-}
+<style scoped lang="sass">
 
-#context-menu:focus {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-#context-menu li {
-  border-bottom: 1px solid #e0e0e0;
-  margin: 0;
-  padding: 5px 35px;
-  transition: 0.4s;
-}
-
-#context-menu li:last-child {
-  border-bottom: none;
-}
-
-#context-menu li:hover {
-  background: #1e88e570;
-  color: #fafafa;
-  transition: 0.4s;
-}
+#context-menu
+  background: #4b4b4bb3
+  backdrop-filter: blur(0.8)
+  border: 1px solid #bdbdbd
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12)
+  display: block
+  list-style: none
+  margin: 0
+  padding: 0
+  position: absolute
+  /* width: 250px */
+  transform: translateY(8px)
+  opacity: 0
+  z-index: 2
+  transition: transform 0.2s, opacity 0.2s
+  &:focus
+    opacity: 1
+    transform: translateY(0)
+  li
+    border-bottom: 1px solid #e0e0e0
+    margin: 0
+    padding: 5px 35px
+    transition: 0.4s
+    &:last-child
+      border-bottom: none
+    &:hover
+      background: #1e88e570
+      color: #fafafa
+      transition: 0.4s
 </style>

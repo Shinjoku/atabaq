@@ -43,16 +43,17 @@ export default {
 };
 </script>
 
-<style>
-#desktop {
-  display: flex;
-  background-color: lightblue;
-  width: 100%;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-.color--danger {
-  color: red;
-}
+<style lang="sass">
+
+  #desktop
+    display: flex
+    background-color: lightblue
+    width: 100%
+    flex-direction: column
+    justify-content: center
+    align-items: center
+
+  .color--danger
+    color: red
+
 </style>
