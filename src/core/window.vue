@@ -2,7 +2,7 @@
   <div 
     class="window" 
     :class="{ 'window--maximized': !!maximized, 'window--floating': !!floating }"
-    :style="`width: ${w}; height: ${h};`"
+    :style="`width: ${w}px; height: ${h}px;`"
   >
     <div class="window-action-container">
       <button type="button" @click.stop="open=false; $emit('minimize')">
@@ -16,14 +16,14 @@
       </button>
     </div>
     <div class="window-resize-handlers">
-      <button type="button" class="top left xy-handler"></button>
-      <button type="button" class="top right xy-handler"></button>
-      <button type="button" class="bottom left xy-handler"></button>
-      <button type="button" class="bottom right xy-handler"></button>
-      <button type="button" class="top y-handler"></button>
-      <button type="button" class="bottom y-handler"></button>
-      <button type="button" class="left x-handler"></button>
-      <button type="button" class="right x-handler"></button>
+      <button type="button" class="top left xy-handler" @mousedown="resize($event)"></button>
+      <button type="button" class="top right xy-handler" @mousedown="resize($event)"></button>
+      <button type="button" class="bottom left xy-handler" @mousedown="resize($event)"></button>
+      <button type="button" class="bottom right xy-handler" @mousedown="resize($event)"></button>
+      <button type="button" class="top y-handler" @mousedown="resize($event)"></button>
+      <button type="button" class="bottom y-handler" @mousedown="resize($event)"></button>
+      <button type="button" class="left x-handler" @mousedown="resize($event)"></button>
+      <button type="button" class="right x-handler" @mousedown="resize($event)"></button>
     </div>
     <slot />
   </div>
@@ -34,8 +34,8 @@ export default {
   props: {
     maximized: Boolean,
     floating: Boolean,
-    width: String,
-    height: String
+    width: Number,
+    height: Number
   },
   data(){
     return { 
@@ -52,6 +52,100 @@ export default {
       // TODO: handle changes in dimensions based on this.isMaximized
 
       this.$emit("maximize");
+    },
+    resize(e){
+
+      /**
+       * This is the main function for the resizing logic needed for the window component.
+       * It was based on this Medium article from Nguyễn Việt Hưng:
+       * https://medium.com/the-z/making-a-resizable-div-in-js-is-not-easy-as-you-think-bda19a1bc53d
+       * There's a lot of interesting insights about how to add this sort of feature into a div :D
+      */
+
+      const resizer = e.target;
+      let _this = this;
+
+      window.addEventListener('mousemove', _resize);
+      window.addEventListener('mouseup', stopResize);
+
+      function _resize(e){
+        resizer.is = names => {
+          const classes = names.split(" ");
+
+          function reducer(containsAll, currentClass){
+            return containsAll && resizer.classList.contains(currentClass);
+          }
+
+          return classes.reduce(reducer, true);
+
+        }
+
+        const rect = _this.$el.getBoundingClientRect();
+
+        if (resizer.is("x-handler") || resizer.is("xy-handler")){
+          if (resizer.is("left"))
+            _this.w = rect.right - e.pageX;
+          else // right
+            _this.w = e.pageX - rect.left;
+        }
+
+        if (resizer.is("y-handler") || resizer.is("xy-handler")){
+          if (resizer.is("top"))
+            _this.h = rect.bottom - e.pageY;
+          else // bottom
+            _this.h = e.pageY - rect.top;
+        }
+
+        // if (resizer.is("xy-handler bottom right")){
+        //   _this.w = e.pageX - rect.left;
+        //   _this.h = e.pageY - rect.top;
+        //   return;
+        // }
+
+        // if (resizer.is("xy-handler bottom left")){
+        //   _this.w = rect.right - e.pageX;
+        //   _this.h = e.pageY - rect.top;
+        //   return;
+        // }
+
+        // if (resizer.is("xy-handler top left")){
+        //   _this.w = rect.right - e.pageX;
+        //   _this.h = rect.bottom - e.pageY;
+        //   return;
+        // }
+
+        // if (resizer.is("xy-handler top right")){
+        //   _this.w = e.pageX - rect.left;
+        //   _this.h = rect.bottom - e.pageY;
+        //   return;
+        // }
+
+        // if (resizer.is("x-handler left")){
+        //   _this.w = rect.right - e.pageX;
+        //   return;
+        // }
+
+        // if (resizer.is("x-handler right")){
+        //   _this.w = e.pageX - rect.left;
+        //   return;
+        // }
+
+        // if (resizer.is("y-handler top")){
+        //   _this.h = rect.bottom - e.pageY;
+        //   return;
+        // }
+
+        // if (resizer.is("y-handler bottom")){
+        //   _this.h = e.pageY - rect.top;
+        //   return;
+        // }
+
+      }
+
+      function stopResize(){
+        window.removeEventListener('mousemove', _resize);
+        window.removeEventListener('mouseup', stopResize);
+      }
     }
   }
 }

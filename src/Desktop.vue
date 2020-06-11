@@ -6,7 +6,7 @@
       @ready="setToggleMenuFn"
     />
     <h1>Here's a window o/</h1>
-    <window width="500px" height="250px">what're ya talking about</window>
+    <window :width="500" :height="250">what're ya talking about</window>
     <!-- <icon-grid /> -->
     <!-- <taskbar /> -->
   </div>
