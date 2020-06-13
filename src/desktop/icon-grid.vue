@@ -47,7 +47,7 @@ export default {
           color: #004fff
       
       .image
-        margin: 10px auto
+        margin: 0 auto 10px auto
         width: 80px
         height: 80px
         background: #1b1b1b
