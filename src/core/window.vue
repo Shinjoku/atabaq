@@ -137,7 +137,7 @@ $resize-handler-height: 5px
 .window
   display: block
   position: relative
-  background-color: #4b4b4b
+  background-color: var(--background-grey)
   overflow: auto
 
   max-width: 100vw
@@ -153,7 +153,7 @@ $resize-handler-height: 5px
   .window-action-bar
     display: flex
     justify-content: space-between
-    background-color: #2b2b2b
+    background-color: var(--primary-grey)
     color: #e2e2e2
 
     .title
@@ -166,8 +166,8 @@ $resize-handler-height: 5px
         all: unset
         padding: .1em .5em
         &:hover
-          background-color: #3b3b3b
-          color: #ff6a6a
+          background-color: var(--secondary-grey)
+          color: var(--hovered-icon)
 
   .window-resize-handlers
     button

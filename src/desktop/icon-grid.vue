@@ -42,7 +42,7 @@ export default {
       
       &:hover
         .image
-          background: #2b2b2b
+          background: var(--secondary-grey)
         .title
           color: #004fff
       
@@ -50,5 +50,5 @@ export default {
         margin: 0 auto 10px auto
         width: 80px
         height: 80px
-        background: #1b1b1b
+        background: var(--primary-grey)
 </style>

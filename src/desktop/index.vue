@@ -66,13 +66,14 @@ export default {
 
   #desktop
     display: flex
-    background-color: lightblue
+    background-color: var(--background)
     width: 100%
+    min-height: 100vh
     flex-direction: column
     justify-content: center
     align-items: center
 
   .color--danger
-    color: red
+    color: var(--attention-red)
 
 </style>

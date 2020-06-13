@@ -1,0 +1,17 @@
+:root {
+
+  --background: lightblue;
+
+  --primary-grey: #2b2b2b;
+  --secondary-grey: #3b3b3b;
+  --background-grey: #4b4b4b;
+
+  --attention-red: red;
+  --hovered-icon: #ff6a6a;
+
+  --taskbar-height: min(50px, 8vh);
+
+}
+
+html, body { margin: 0; padding: 0; }
+h1, h2, h3, h4, h5, h6, p { margin: 0; }
