@@ -1,6 +1,12 @@
 <template>
   <div id="desktop" @contextmenu.prevent="openContextMenu">
     <icon-grid @open="openProgram($event)" />
+    <taskbar 
+      :fixedPrograms="[{ name: 'Example', content: 'Something cool' }]"
+      :openPrograms="windows" 
+      @start="openProgram($event)"
+      @open="focusProgram($event)"
+    />
     <context-menu
       ref="context-menu"
       :options="contextMenuOptions"
@@ -17,17 +23,17 @@
     >
       {{ window.content }}
     </window>
-    <!-- <taskbar /> -->
   </div>
 </template>
 
 <script>
 import Window from "../core/window";
 import ContextMenu from "../core/context-menu";
+import Taskbar from '../core/taskbar';
 import IconGrid from './icon-grid';
 
 export default {
-  components: { Window, ContextMenu, IconGrid },
+  components: { Window, ContextMenu, IconGrid, Taskbar },
   data: () => ({
     contextMenuOptions: [
       {
