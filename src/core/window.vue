@@ -96,50 +96,6 @@ export default {
             _this.h = e.pageY - rect.top;
         }
 
-        // if (resizer.is("xy-handler bottom right")){
-        //   _this.w = e.pageX - rect.left;
-        //   _this.h = e.pageY - rect.top;
-        //   return;
-        // }
-
-        // if (resizer.is("xy-handler bottom left")){
-        //   _this.w = rect.right - e.pageX;
-        //   _this.h = e.pageY - rect.top;
-        //   return;
-        // }
-
-        // if (resizer.is("xy-handler top left")){
-        //   _this.w = rect.right - e.pageX;
-        //   _this.h = rect.bottom - e.pageY;
-        //   return;
-        // }
-
-        // if (resizer.is("xy-handler top right")){
-        //   _this.w = e.pageX - rect.left;
-        //   _this.h = rect.bottom - e.pageY;
-        //   return;
-        // }
-
-        // if (resizer.is("x-handler left")){
-        //   _this.w = rect.right - e.pageX;
-        //   return;
-        // }
-
-        // if (resizer.is("x-handler right")){
-        //   _this.w = e.pageX - rect.left;
-        //   return;
-        // }
-
-        // if (resizer.is("y-handler top")){
-        //   _this.h = rect.bottom - e.pageY;
-        //   return;
-        // }
-
-        // if (resizer.is("y-handler bottom")){
-        //   _this.h = e.pageY - rect.top;
-        //   return;
-        // }
-
       }
 
       function stopResize(){
@@ -161,6 +117,12 @@ $resize-handler-height: 5px
   position: relative
   background-color: #4b4b4b
   overflow: auto
+
+  min-width: 200px
+  min-height: 100px
+
+  max-width: 100vw
+  max-height: 100vh
 
   .window-action-container
     background-color: #2b2b2b
