@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import Desktop from './Desktop.vue'
+import Desktop from './desktop'
 
 Vue.config.productionTip = false
 

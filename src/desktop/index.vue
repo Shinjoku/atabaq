@@ -1,5 +1,6 @@
 <template>
   <div id="desktop" @contextmenu.prevent="openContextMenu">
+    <icon-grid @open="openProgram($event)" />
     <context-menu
       ref="context-menu"
       :options="contextMenuOptions"
@@ -7,26 +8,26 @@
     />
     <window 
       v-for="(window, idx) in windows" 
-      :key="'window-' + window.name"
+      :key="'window-' + window.name.replace(/\s/g, '_')"
       :title="window.name"
       :width="window.width"
       :height="window.height"
       :maximized="window.maximized"
       @close="closeWindow(idx)"
     >
-      what're ya talking about
+      {{ window.content }}
     </window>
-    <!-- <icon-grid /> -->
     <!-- <taskbar /> -->
   </div>
 </template>
 
 <script>
-import Window from "./core/window";
-import ContextMenu from "./core/ContextMenu";
+import Window from "../core/window";
+import ContextMenu from "../core/ContextMenu";
+import IconGrid from './icon-grid';
 
 export default {
-  components: { Window, ContextMenu },
+  components: { Window, ContextMenu, IconGrid },
   data: () => ({
     contextMenuOptions: [
       {
@@ -44,7 +45,7 @@ export default {
     ],
     openContextMenu: null,
     windows: [
-      { name: "Window #1", width: 500, height: 250, maximized: false }
+      { name: "Window #1", width: 500, height: 250, maximized: false, content: "what hell yea what" }
     ]
   }),
   methods: {
@@ -53,6 +54,9 @@ export default {
     },
     closeWindow(idx){
       this.windows.splice(idx, 1);
+    },
+    openProgram(programInfo){
+      this.windows.push(programInfo);
     }
   }
 };
