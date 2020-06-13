@@ -37,18 +37,30 @@
 </template>
 
 <script>
+const minWidth = 250;
+const minHeight = 100;
+
 export default {
   props: {
-    maximized: Boolean,
+    maximized: {
+      type: Boolean,
+      default: false
+    },
     floating: Boolean,
-    width: Number,
-    height: Number,
+    width: {
+      type: Number,
+      default: minWidth
+    },
+    height: {
+      type: Number,
+      default: minHeight
+    },
     title: String
   },
   data(){
     return { 
       open: true,
-      isMaximized: this.maximized || false,
+      isMaximized: this.maximized,
       w: this.width,
       h: this.height,
       // controls whether width or height should be animated (it shouldn't during manual resize)
@@ -86,20 +98,24 @@ export default {
         }
 
         const rect = _this.$el.getBoundingClientRect();
+        let w, h;
 
         if (resizer.is("x-handler") || resizer.is("xy-handler")){
           if (resizer.is("left"))
-            _this.w = rect.right - e.pageX;
+            w = rect.right - e.pageX;
           else // right
-            _this.w = e.pageX - rect.left;
+            w = e.pageX - rect.left;
         }
 
         if (resizer.is("y-handler") || resizer.is("xy-handler")){
           if (resizer.is("top"))
-            _this.h = rect.bottom - e.pageY;
+            h = rect.bottom - e.pageY;
           else // bottom
-            _this.h = e.pageY - rect.top;
+            h = e.pageY - rect.top;
         }
+
+        _this.w = w > minWidth ? w : minWidth;
+        _this.h = h > minHeight ? h : minHeight;
 
       }
 
@@ -123,9 +139,6 @@ $resize-handler-height: 5px
   position: relative
   background-color: #4b4b4b
   overflow: auto
-
-  min-width: 200px
-  min-height: 100px
 
   max-width: 100vw
   max-height: 100vh
