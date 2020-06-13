@@ -12,9 +12,9 @@
     <button 
       type="button"
       class="open program"
-      v-for="program in openPrograms"
+      v-for="(program, idx) in openPrograms"
       :key="'open-program-'+program.name.replace(/\s/g, '_')"
-      @click="$emit('open', program)"
+      @click="$emit('open', idx)"
     >
       <span class="image"></span>
     </button>

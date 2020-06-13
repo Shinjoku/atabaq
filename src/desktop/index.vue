@@ -5,7 +5,7 @@
       :fixedPrograms="[{ name: 'Example', content: 'Something cool' }]"
       :openPrograms="windows" 
       @start="openProgram($event)"
-      @open="focusProgram($event)"
+      @open="toggleProgram($event)"
     />
     <context-menu
       ref="context-menu"
@@ -19,7 +19,9 @@
       :width="window.width"
       :height="window.height"
       :maximized="window.maximized"
-      @close="closeWindow(idx)"
+      :open="window.open"
+      @minimize="minimizeProgram(idx)"
+      @close="closeProgram(idx)"
     >
       {{ window.content }}
     </window>
@@ -51,18 +53,36 @@ export default {
     ],
     openContextMenu: null,
     windows: [
-      { name: "Window #1", width: 500, height: 250, maximized: false, content: "what hell yea what" }
+      { 
+        name: "Window #1", 
+        width: 500, 
+        height: 250, 
+        maximized: false, 
+        open: true,
+        content: "what hell yea what" 
+      }
     ]
   }),
   methods: {
     setToggleMenuFn(fn) {
       this.openContextMenu = fn;
     },
-    closeWindow(idx){
+    closeProgram(idx){
       this.windows.splice(idx, 1);
     },
     openProgram(programInfo){
-      this.windows.push(programInfo);
+      this.windows.push({ ...programInfo, open: true });
+    },
+    /* Here Vue needs to react to a change in an object inside an array, which is one level deeper
+      than expected (root-level is expected, like updating the whole array element). 
+      Because of that, we need to explicitly specify that change via the `$set` function of the 
+      Vue instance. */
+    minimizeProgram(idx){
+      this.$set(this.windows[idx], 'open', false)
+    },
+    toggleProgram(idx){
+      const programRef = this.windows[idx];
+      this.$set(programRef, "open", !programRef.open);
     }
   }
 };

@@ -3,6 +3,7 @@
     class="window" 
     :class="{ 
       'window--maximized': !!isMaximized, 
+      'window--open': !!open,
       'window--floating': !!floating, 
       'animate-resize': !!animateResize
     }"
@@ -11,7 +12,7 @@
     <div class="window-action-bar">
       <p class="title">{{ title }}</p>
       <p class="action-btn-container">
-        <button type="button" @click.stop="open=false; $emit('minimize')">
+        <button type="button" @click.stop="$emit('minimize')">
           <i class="fas fa-minus"></i>
         </button>
         <button type="button" @click.stop="isMaximized = !isMaximized">
@@ -46,6 +47,7 @@ export default {
       type: Boolean,
       default: false
     },
+    open: Boolean,
     floating: Boolean,
     width: {
       type: Number,
@@ -59,7 +61,6 @@ export default {
   },
   data(){
     return { 
-      open: true,
       isMaximized: this.maximized,
       w: this.width,
       h: this.height,
@@ -139,6 +140,7 @@ $resize-handler-height: 5px
   position: relative
   background-color: var(--background-grey)
   overflow: auto
+  visibility: hidden
 
   max-width: 100vw
   max-height: 100vh
@@ -149,6 +151,9 @@ $resize-handler-height: 5px
   &.window--maximized
     width: 100vw
     height: 100vh
+  
+  &.window--open
+    visibility: visible
 
   .window-action-bar
     display: flex
