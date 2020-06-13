@@ -23,7 +23,7 @@
 
 <script>
 import Window from "../core/window";
-import ContextMenu from "../core/ContextMenu";
+import ContextMenu from "../core/context-menu";
 import IconGrid from './icon-grid';
 
 export default {
