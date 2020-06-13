@@ -1,15 +1,15 @@
 <template>
   <div 
     class="window" 
-    :class="{ 'window--maximized': !!maximized, 'window--floating': !!floating }"
-    :style="`width: ${w}px; height: ${h}px;`"
+    :class="{ 'window--maximized': !!isMaximized, 'window--floating': !!floating }"
+    :style="!isMaximized ? `width: ${w}px; height: ${h}px;` : ''"
   >
     <div class="window-action-container">
       <button type="button" @click.stop="open=false; $emit('minimize')">
         <i class="fas fa-minus"></i>
       </button>
-      <button type="button" @click.stop="toggleMaximize()">
-        <i class="far fa-square"></i>
+      <button type="button" @click.stop="isMaximized = !isMaximized">
+        <i :class="isMaximized ? 'fas fa-compress' : 'far fa-square'"></i>
       </button>
       <button type="button" @click.stop="$emit('close')">
         <i class="fas fa-times color--danger"></i>
@@ -46,13 +46,6 @@ export default {
     };
   },
   methods: {
-    toggleMaximize(){
-      this.isMaximized = !this.isMaximized;
-
-      // TODO: handle changes in dimensions based on this.isMaximized
-
-      this.$emit("maximize");
-    },
     resize(e){
 
       /**
@@ -123,6 +116,10 @@ $resize-handler-height: 5px
 
   max-width: 100vw
   max-height: 100vh
+
+  &.window--maximized
+    width: 100vw
+    height: 100vh
 
   .window-action-container
     background-color: #2b2b2b
