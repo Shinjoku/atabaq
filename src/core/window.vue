@@ -1,7 +1,11 @@
 <template>
   <div 
     class="window" 
-    :class="{ 'window--maximized': !!isMaximized, 'window--floating': !!floating }"
+    :class="{ 
+      'window--maximized': !!isMaximized, 
+      'window--floating': !!floating, 
+      'animate-resize': !!animateResize
+    }"
     :style="!isMaximized ? `width: ${w}px; height: ${h}px;` : ''"
   >
     <div class="window-action-container">
@@ -42,7 +46,9 @@ export default {
       open: true,
       isMaximized: this.maximized || false,
       w: this.width,
-      h: this.height
+      h: this.height,
+      // controls whether width or height should be animated (it shouldn't during manual resize)
+      animateResize: true
     };
   },
   methods: {
@@ -57,6 +63,8 @@ export default {
 
       const resizer = e.target;
       let _this = this;
+
+      _this.animateResize = false;
 
       window.addEventListener('mousemove', _resize);
       window.addEventListener('mouseup', stopResize);
@@ -94,6 +102,7 @@ export default {
       function stopResize(){
         window.removeEventListener('mousemove', _resize);
         window.removeEventListener('mouseup', stopResize);
+        _this.animateResize = true;
       }
     }
   }
@@ -116,6 +125,9 @@ $resize-handler-height: 5px
 
   max-width: 100vw
   max-height: 100vh
+
+  &.animate-resize
+    transition: width .4s, height .4s
 
   &.window--maximized
     width: 100vw
