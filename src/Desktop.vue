@@ -5,7 +5,17 @@
       :options="contextMenuOptions"
       @ready="setToggleMenuFn"
     />
-    <window :width="500" :height="250">what're ya talking about</window>
+    <window 
+      v-for="(window, idx) in windows" 
+      :key="'window-' + window.name"
+      :title="window.name"
+      :width="window.width"
+      :height="window.height"
+      :maximized="window.maximized"
+      @close="closeWindow(idx)"
+    >
+      what're ya talking about
+    </window>
     <!-- <icon-grid /> -->
     <!-- <taskbar /> -->
   </div>
@@ -32,11 +42,17 @@ export default {
         }
       }
     ],
-    openContextMenu: null 
+    openContextMenu: null,
+    windows: [
+      { name: "Window #1", width: 500, height: 250, maximized: false }
+    ]
   }),
   methods: {
     setToggleMenuFn(fn) {
       this.openContextMenu = fn;
+    },
+    closeWindow(idx){
+      this.windows.splice(idx, 1);
     }
   }
 };

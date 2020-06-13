@@ -8,16 +8,19 @@
     }"
     :style="!isMaximized ? `width: ${w}px; height: ${h}px;` : ''"
   >
-    <div class="window-action-container">
-      <button type="button" @click.stop="open=false; $emit('minimize')">
-        <i class="fas fa-minus"></i>
-      </button>
-      <button type="button" @click.stop="isMaximized = !isMaximized">
-        <i :class="isMaximized ? 'fas fa-compress' : 'far fa-square'"></i>
-      </button>
-      <button type="button" @click.stop="$emit('close')">
-        <i class="fas fa-times color--danger"></i>
-      </button>
+    <div class="window-action-bar">
+      <p class="title">{{ title }}</p>
+      <p class="action-btn-container">
+        <button type="button" @click.stop="open=false; $emit('minimize')">
+          <i class="fas fa-minus"></i>
+        </button>
+        <button type="button" @click.stop="isMaximized = !isMaximized">
+          <i :class="isMaximized ? 'fas fa-compress' : 'far fa-square'"></i>
+        </button>
+        <button type="button" @click.stop="$emit('close')">
+          <i class="fas fa-times color--danger"></i>
+        </button>
+      </p>
     </div>
     <div class="window-resize-handlers">
       <button type="button" class="top left xy-handler" @mousedown="resize($event)"></button>
@@ -39,7 +42,8 @@ export default {
     maximized: Boolean,
     floating: Boolean,
     width: Number,
-    height: Number
+    height: Number,
+    title: String
   },
   data(){
     return { 
@@ -133,17 +137,24 @@ $resize-handler-height: 5px
     width: 100vw
     height: 100vh
 
-  .window-action-container
+  .window-action-bar
+    display: flex
+    justify-content: space-between
     background-color: #2b2b2b
-    text-align: right
-  
-    button
-      all: unset
-      padding: .1em .5em
-      color: #e2e2e2
-      &:hover
-        background-color: #3b3b3b
-        color: #ff6a6a
+    color: #e2e2e2
+
+    .title
+      margin-left: 8px
+
+    .action-btn-container
+      text-align: right
+    
+      button
+        all: unset
+        padding: .1em .5em
+        &:hover
+          background-color: #3b3b3b
+          color: #ff6a6a
 
   .window-resize-handlers
     button
