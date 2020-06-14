@@ -7,7 +7,7 @@
       'window--floating': !!floating, 
       'animate-resize': !!animateResize
     }"
-    :style="!isMaximized ? `width: ${w}px; height: ${h}px;` : ''"
+    :style="!isMaximized ? `top: ${y}px; left: ${x}px; width: ${w}px; height: ${h}px;` : ''"
   >
     <div class="window-action-bar">
       <p class="title">{{ title }}</p>
@@ -57,6 +57,14 @@ export default {
       type: Number,
       default: minHeight
     },
+    posX: {
+      type: Number,
+      default: 20
+    },
+    posY: {
+      type: Number,
+      default: 20
+    },
     title: String
   },
   data(){
@@ -64,6 +72,8 @@ export default {
       isMaximized: this.maximized,
       w: this.width,
       h: this.height,
+      x: this.posX,
+      y: this.posY,
       // controls whether width or height should be animated (it shouldn't during manual resize)
       animateResize: true
     };
@@ -99,24 +109,39 @@ export default {
         }
 
         const rect = _this.$el.getBoundingClientRect();
-        let w, h;
+        let x, y, w, h;
 
         if (resizer.is("x-handler") || resizer.is("xy-handler")){
-          if (resizer.is("left"))
+
+          if (resizer.is("left")){
+            x = e.pageX;
             w = rect.right - e.pageX;
-          else // right
+          } else // right
             w = e.pageX - rect.left;
+          
+          if (w > minWidth)
+            _this.x = x;
+          
+          _this.w = w > minWidth ? w : minWidth;
+
         }
 
         if (resizer.is("y-handler") || resizer.is("xy-handler")){
-          if (resizer.is("top"))
+
+          if (resizer.is("top")){
+            y = e.pageY;
             h = rect.bottom - e.pageY;
-          else // bottom
+          } else // bottom
             h = e.pageY - rect.top;
+
+          if (h > minHeight)
+            _this.y = y;
+          
+          _this.h = h > minHeight ? h : minHeight;
+
         }
 
-        _this.w = w > minWidth ? w : minWidth;
-        _this.h = h > minHeight ? h : minHeight;
+        
 
       }
 
