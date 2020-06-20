@@ -1,6 +1,12 @@
 <template>
   <div id="desktop" @contextmenu.prevent="openContextMenu">
-    <icon-grid @open="openProgram($event)" />
+    <tile-view v-if="activeTile" :rows="activeTile.rows" :cols="activeTile.cols" />
+    <icon-grid v-else @open="openProgram($event)" />
+    <tile-manager 
+      :activeTile="activeTile || {}" 
+      @set-tile="activeTile = $event" 
+      @clear-tile="activeTile = null"
+    />
     <taskbar 
       :fixedPrograms="[{ name: 'Example', content: 'Something cool' }]"
       :openPrograms="windows" 
@@ -31,11 +37,13 @@
 <script>
 import Window from "../core/window";
 import ContextMenu from "../core/context-menu";
-import Taskbar from '../core/taskbar';
-import IconGrid from './icon-grid';
+import Taskbar from "../core/taskbar";
+import TileManager from "../core/tile-manager";
+import TileView from "../core/tile-view";
+import IconGrid from "./icon-grid";
 
 export default {
-  components: { Window, ContextMenu, IconGrid, Taskbar },
+  components: { Window, ContextMenu, IconGrid, Taskbar, TileManager, TileView },
   data: () => ({
     contextMenuOptions: [
       {
@@ -52,16 +60,8 @@ export default {
       }
     ],
     openContextMenu: null,
-    windows: [
-      { 
-        name: "Window #1", 
-        width: 500, 
-        height: 250, 
-        maximized: false, 
-        open: true,
-        content: "what hell yea what" 
-      }
-    ]
+    activeTile: null,
+    windows: []
   }),
   methods: {
     setToggleMenuFn(fn) {

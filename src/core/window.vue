@@ -53,11 +53,11 @@ export default {
     open: Boolean,
     floating: Boolean,
     width: {
-      type: Number,
+      type: [Number, String],
       default: minWidth
     },
     height: {
-      type: Number,
+      type: [Number, String],
       default: minHeight
     },
     posX: {
