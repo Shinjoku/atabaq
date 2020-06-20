@@ -113,8 +113,11 @@ export default {
           } else // right
             w = e.pageX - rect.left;
           
-          if (w > minWidth)
+          if (w > minWidth){
             _this.x = x;
+            _this.w = w;  
+          } else
+            _this.w = minWidth;
           
           _this.w = w > minWidth ? w : minWidth;
 
@@ -128,14 +131,13 @@ export default {
           } else // bottom
             h = e.pageY - rect.top;
 
-          if (h > minHeight)
+          if (h > minHeight){
             _this.y = y;
-          
-          _this.h = h > minHeight ? h : minHeight;
+            _this.h = h;
+          } else
+            _this.h = minHeight;
 
         }
-
-        
 
       }
 
