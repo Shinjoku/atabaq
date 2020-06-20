@@ -96,6 +96,7 @@ export default {
     width: 100%
     min-height: 100vh
     flex-direction: column
+    overflow: hidden
 
   .color--danger
     color: var(--attention-red)

@@ -39,6 +39,8 @@
 </template>
 
 <script>
+import { getTaskbarHeight } from '../util';
+
 const minWidth = 250;
 const minHeight = 100;
 
@@ -103,7 +105,7 @@ export default {
         resizer.is = className => resizer.classList.contains(className);
 
         const rect = _this.$el.getBoundingClientRect();
-        let x, y, w, h;
+        let { x, y, w, h } = _this;
 
         if (resizer.is("x-handler") || resizer.is("xy-handler")){
 
@@ -112,15 +114,16 @@ export default {
             w = rect.right - e.pageX;
           } else // right
             w = e.pageX - rect.left;
-          
+
+          if (x < 0 || x + w >= window.innerWidth)
+            return;
+
           if (w > minWidth){
             _this.x = x;
             _this.w = w;  
           } else
             _this.w = minWidth;
           
-          _this.w = w > minWidth ? w : minWidth;
-
         }
 
         if (resizer.is("y-handler") || resizer.is("xy-handler")){
@@ -130,6 +133,11 @@ export default {
             h = rect.bottom - e.pageY;
           } else // bottom
             h = e.pageY - rect.top;
+
+          const taskbarHeight = getTaskbarHeight();
+
+          if (y < 0 || y + h >= window.innerHeight - taskbarHeight)
+            return;
 
           if (h > minHeight){
             _this.y = y;
@@ -169,11 +177,13 @@ export default {
           x = 0;
         else if (x + _this.w > window.innerWidth)
           x = window.innerWidth - _this.w;
-        
+
+        const taskbarHeight = getTaskbarHeight();
+
         if (y < 0)
           y = 0;
-        else if (y + _this.h > window.innerHeight)
-          y = window.innerHeight - _this.h;
+        else if (y + _this.h > window.innerHeight - taskbarHeight)
+          y = window.innerHeight - taskbarHeight - _this.h;
       
         _this.x = x;
         _this.y = y;
@@ -204,14 +214,14 @@ $resize-handler-height: 5px
   visibility: hidden
 
   max-width: 100vw
-  max-height: 100vh
+  max-height: calc(100vh - var(--taskbar-height))
 
   &.animate-resize
     transition: width .4s, height .4s
 
   &.window--maximized
     width: 100vw
-    height: 100vh
+    height: calc(100vh - var(--taskbar-height))
   
   &.window--open
     visibility: visible
