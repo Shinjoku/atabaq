@@ -5,11 +5,12 @@
       'window--maximized': !!isMaximized, 
       'window--open': !!open,
       'window--floating': !!floating, 
-      'animate-resize': !!animateResize
+      'animate-resize': !inManualResize,
+      'moving-around': !!moving
     }"
     :style="!isMaximized ? `top: ${y}px; left: ${x}px; width: ${w}px; height: ${h}px;` : ''"
   >
-    <div class="window-action-bar">
+    <div class="window-action-bar" @mousedown="move($event)">
       <p class="title">{{ title }}</p>
       <p class="action-btn-container">
         <button type="button" @click.stop="$emit('minimize')">
@@ -24,14 +25,14 @@
       </p>
     </div>
     <div class="window-resize-handlers">
-      <button type="button" class="top left xy-handler" @mousedown="resize($event)"></button>
-      <button type="button" class="top right xy-handler" @mousedown="resize($event)"></button>
-      <button type="button" class="bottom left xy-handler" @mousedown="resize($event)"></button>
-      <button type="button" class="bottom right xy-handler" @mousedown="resize($event)"></button>
-      <button type="button" class="top y-handler" @mousedown="resize($event)"></button>
-      <button type="button" class="bottom y-handler" @mousedown="resize($event)"></button>
-      <button type="button" class="left x-handler" @mousedown="resize($event)"></button>
-      <button type="button" class="right x-handler" @mousedown="resize($event)"></button>
+      <button type="button" class="top left xy-handler" @mousedown.stop="resize($event)"></button>
+      <button type="button" class="top right xy-handler" @mousedown.stop="resize($event)"></button>
+      <button type="button" class="bottom left xy-handler" @mousedown.stop="resize($event)"></button>
+      <button type="button" class="bottom right xy-handler" @mousedown.stop="resize($event)"></button>
+      <button type="button" class="top y-handler" @mousedown.stop="resize($event)"></button>
+      <button type="button" class="bottom y-handler" @mousedown.stop="resize($event)"></button>
+      <button type="button" class="left x-handler" @mousedown.stop="resize($event)"></button>
+      <button type="button" class="right x-handler" @mousedown.stop="resize($event)"></button>
     </div>
     <slot />
   </div>
@@ -75,7 +76,9 @@ export default {
       x: this.posX,
       y: this.posY,
       // controls whether width or height should be animated (it shouldn't during manual resize)
-      animateResize: true
+      inManualResize: false,
+      // controls whether window content is selectable (shouldn't during when repositioning window)
+      moving: false
     };
   },
   methods: {
@@ -91,7 +94,7 @@ export default {
       const resizer = e.target;
       let _this = this;
 
-      _this.animateResize = false;
+      _this.inManualResize = true;
 
       window.addEventListener('mousemove', _resize);
       window.addEventListener('mouseup', stopResize);
@@ -148,8 +151,48 @@ export default {
       function stopResize(){
         window.removeEventListener('mousemove', _resize);
         window.removeEventListener('mouseup', stopResize);
-        _this.animateResize = true;
+        _this.inManualResize = false;
       }
+    },
+    move(mousedownEvent){
+
+      const _this = this;
+
+      if (!mousedownEvent.target.classList.contains("window-action-bar"))
+        return;
+
+      window.addEventListener("mousemove", _move);
+      window.addEventListener("mouseup", stopMoving);
+
+      function _move(mousemoveEvent){
+
+        if (!_this.moving)
+          _this.moving = true;
+
+        let x = mousemoveEvent.pageX - mousedownEvent.offsetX;
+        let y = mousemoveEvent.pageY - mousedownEvent.offsetY;
+
+        if (x < 0)
+          x = 0;
+        else if (x + _this.w > window.innerWidth)
+          x = window.innerWidth - _this.w;
+        
+        if (y < 0)
+          y = 0;
+        else if (y + _this.h > window.innerHeight)
+          y = window.innerHeight - _this.h;
+      
+        _this.x = x;
+        _this.y = y;
+
+      }
+
+      function stopMoving(){
+        _this.moving = false;
+        window.removeEventListener("mousemove", _move);
+        window.removeEventListener("mouseup", stopMoving);
+      }
+
     }
   }
 }
@@ -179,6 +222,9 @@ $resize-handler-height: 5px
   
   &.window--open
     visibility: visible
+  
+  &.moving-around
+    user-select: none
 
   .window-action-bar
     display: flex
