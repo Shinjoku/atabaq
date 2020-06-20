@@ -100,16 +100,7 @@ export default {
       window.addEventListener('mouseup', stopResize);
 
       function _resize(e){
-        resizer.is = names => {
-          const classes = names.split(" ");
-
-          function reducer(containsAll, currentClass){
-            return containsAll && resizer.classList.contains(currentClass);
-          }
-
-          return classes.reduce(reducer, true);
-
-        }
+        resizer.is = className => resizer.classList.contains(className);
 
         const rect = _this.$el.getBoundingClientRect();
         let x, y, w, h;
